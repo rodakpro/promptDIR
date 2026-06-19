@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
-import { Check, KeyRound, Library, Mail } from "lucide-react";
+import { Check, KeyRound, Library, Lock } from "lucide-react";
 import { SiteShell } from "@/components/site/site-shell";
 import { PageHero } from "@/components/site/page-hero";
-import { EmailCapture } from "@/components/site/email-capture";
+import { AccessForm } from "@/components/site/access-form";
 import { TOTAL_ASSETS } from "@/lib/library";
 
 export const metadata: Metadata = {
-  title: "Access — PromptDir",
+  title: "Get free access — PromptDir",
   description:
-    "Start with the free creator-solopreneur pack. Pro later adds API keys, private collections, and custom JSON."
+    "Enter your email to unlock the full PromptDir library of prompts, agents, checklists, and workflows. Free."
 };
 
 const included = [
@@ -18,19 +18,17 @@ const included = [
   "Weekly CreatorLab drops"
 ];
 
-const tiers: { name: string; price: string; icon: typeof Library; features: string[]; cta: string; highlight: boolean }[] = [
+const tiers: { name: string; price: string; icon: typeof Library; features: string[] }[] = [
   {
     name: "Free",
     price: "$0",
     icon: Library,
     features: [
-      "Browse the full public library",
+      "Browse the full library",
       "Copy prompts and view JSON",
-      "Public API (no key) for free assets",
+      "Public API for free assets",
       "Download the free JSON pack"
-    ],
-    cta: "Join the list",
-    highlight: false
+    ]
   },
   {
     name: "Pro",
@@ -41,19 +39,23 @@ const tiers: { name: string; price: string; icon: typeof Library; features: stri
       "Private, curated collection links",
       "Author and store custom JSON assets",
       "Premium agent and workflow packs"
-    ],
-    cta: "Get notified",
-    highlight: true
+    ]
   }
 ];
 
-export default function AccessPage() {
+export default async function AccessPage({
+  searchParams
+}: {
+  searchParams: Promise<{ next?: string }>;
+}) {
+  const { next } = await searchParams;
+
   return (
     <SiteShell>
       <PageHero
-        label="Launch pack"
-        title={`Start with ${TOTAL_ASSETS} creator-solopreneur assets.`}
-        intro="The foundation pack covers content, research, offers, automation, and two agents. Free assets stay public; Pro adds keys, private collections, and custom JSON."
+        label="Free access"
+        title={`Unlock all ${TOTAL_ASSETS} assets — free.`}
+        intro="Enter your email to browse the full library of prompts, agents, checklists, and workflows. Execution stays on your stack — we only use your email to send new packs and Pro updates."
       />
 
       <div className="mx-auto w-full max-w-5xl px-5 py-8 sm:px-8">
@@ -77,9 +79,7 @@ export default function AccessPage() {
                 return (
                   <div
                     key={tier.name}
-                    className={`rounded-md border p-5 shadow-sm ${
-                      tier.highlight ? "border-accent bg-accent/5" : "border-border-soft bg-panel"
-                    }`}
+                    className="rounded-md border border-border-soft bg-panel p-5 shadow-sm"
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2 text-sm font-black text-foreground">
@@ -104,15 +104,15 @@ export default function AccessPage() {
 
           <div className="self-start rounded-md border border-border-soft bg-panel p-6 shadow-[0_12px_30px_rgba(24,24,27,0.05)]">
             <div className="flex items-center gap-2 text-sm font-black text-accent">
-              <Mail className="size-4" aria-hidden="true" />
-              CreatorLab.pro distribution list
+              <Lock className="size-4" aria-hidden="true" />
+              One step to unlock
             </div>
-            <h2 className="mt-4 text-2xl font-black text-foreground">Get the free JSON pack</h2>
+            <h2 className="mt-4 text-2xl font-black text-foreground">Get instant free access</h2>
             <p className="mt-2 text-sm font-semibold leading-6 text-muted">
-              Join the list for the first PromptDir asset pack and weekly additions.
+              Drop your email and the full library opens immediately.
             </p>
             <div className="mt-5">
-              <EmailCapture id="access-email" buttonLabel="Join the list" />
+              <AccessForm next={next} />
             </div>
           </div>
         </div>

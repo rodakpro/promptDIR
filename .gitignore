@@ -27,3 +27,6 @@ yarn-error.log*
 
 # vercel
 .vercel
+
+# captured emails (prototype email gate) — swap for an ESP later
+/data
