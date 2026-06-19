@@ -1,0 +1,116 @@
+@import "tailwindcss";
+
+/* Class-based dark mode (next-themes adds `class="dark"` on <html>). */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ---- Design tokens (carried over from the Resonance Radar reference) ---- */
+:root {
+  --canvas: 220 24% 99%;
+  --panel: 0 0% 100%;
+  --panel-soft: 220 24% 97%;
+  --surface-soft: 220 22% 97%;
+  --border-soft: 220 16% 90%;
+  --text: 224 32% 10%;
+  --muted: 222 14% 38%;
+  --accent: 22 90% 50%;
+  --accent-2: 28 90% 56%;
+  --warning: 34 94% 52%;
+}
+
+.dark {
+  --canvas: 224 30% 7%;
+  --panel: 224 26% 11%;
+  --panel-soft: 224 20% 15%;
+  --surface-soft: 224 26% 9%;
+  --border-soft: 220 14% 22%;
+  --text: 220 22% 96%;
+  --muted: 220 14% 66%;
+  --accent: 22 92% 56%;
+  --accent-2: 28 92% 62%;
+  --warning: 34 94% 60%;
+}
+
+/* ---- Expose tokens as Tailwind utilities (bg-panel, text-muted, ...) ---- */
+@theme inline {
+  --color-canvas: hsl(var(--canvas));
+  --color-panel: hsl(var(--panel));
+  --color-panel-soft: hsl(var(--panel-soft));
+  --color-surface-soft: hsl(var(--surface-soft));
+  --color-border: hsl(var(--border-soft));
+  --color-border-soft: hsl(var(--border-soft));
+  --color-foreground: hsl(var(--text));
+  --color-muted: hsl(var(--muted));
+  --color-accent: hsl(var(--accent));
+  --color-accent-2: hsl(var(--accent-2));
+  --color-warning: hsl(var(--warning));
+
+  --font-sans: var(--font-space-grotesk), ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", sans-serif;
+
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+
+  --shadow-soft: 0 1px 2px rgb(15 23 42 / 0.04), 0 6px 20px rgb(15 23 42 / 0.05);
+  --shadow-panel: 0 1px 2px rgb(15 23 42 / 0.04), 0 12px 40px rgb(15 23 42 / 0.06);
+  --shadow-glow: 0 20px 50px hsl(var(--accent) / 0.16);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  overflow-x: clip;
+  background:
+    radial-gradient(60rem 32rem at 50% -8rem, hsl(var(--accent-2) / 0.05), transparent 70%),
+    hsl(var(--canvas));
+  color: hsl(var(--text));
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Faint grid backdrop, like the reference UI. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-image:
+    linear-gradient(hsl(var(--border-soft) / 0.3) 1px, transparent 1px),
+    linear-gradient(90deg, hsl(var(--border-soft) / 0.18) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: linear-gradient(to bottom, black, transparent 70%);
+}
+
+::selection {
+  background: hsl(var(--accent) / 0.28);
+  color: hsl(var(--text));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ---- Reusable component utilities ---- */
+@layer components {
+  .glass-panel {
+    @apply rounded-xl border border-border-soft bg-panel shadow-soft;
+  }
+  .surface-soft {
+    @apply bg-surface-soft;
+  }
+  .label-chip {
+    @apply inline-flex items-center gap-2 rounded-full border border-border-soft bg-panel px-3 py-1 text-[0.7rem] font-semibold uppercase tracking-[0.2em] text-accent shadow-sm;
+  }
+  .focus-ring {
+    @apply outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-canvas;
+  }
+}
