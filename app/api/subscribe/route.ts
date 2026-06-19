@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
-import { promises as fs } from "fs";
-import path from "path";
+import { addSubscriber } from "@/lib/subscribe-provider";
 
 function isValidEmail(value: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
@@ -9,9 +8,8 @@ function isValidEmail(value: string) {
 /**
  * Email capture + access gate.
  *
- * PROTOTYPE: subscribers are appended to data/subscribers.jsonl on the server.
- * Swap this for a real ESP (Beehiiv / ConvertKit / Resend) when one is connected
- * — keep the cookie logic so the gate keeps working.
+ * Capture is delegated to lib/subscribe-provider (file in the prototype; swap to
+ * an ESP via env). The cookie is what actually unlocks the gated library.
  */
 export async function POST(request: Request) {
   let email = "";
@@ -26,22 +24,14 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "invalid_email" }, { status: 400 });
   }
 
-  try {
-    const dir = path.join(process.cwd(), "data");
-    await fs.mkdir(dir, { recursive: true });
-    const line = JSON.stringify({ email, ts: new Date().toISOString() }) + "\n";
-    await fs.appendFile(path.join(dir, "subscribers.jsonl"), line, "utf8");
-  } catch (err) {
-    // Don't block access if the write fails (e.g. read-only fs) — just log it.
-    console.error("subscriber write failed", err);
-  }
-  console.log("new subscriber:", email);
+  await addSubscriber(email);
 
   const response = NextResponse.json({ ok: true });
   response.cookies.set("pd_access", "1", {
     httpOnly: true,
     sameSite: "lax",
     path: "/",
+    secure: process.env.NODE_ENV === "production",
     maxAge: 60 * 60 * 24 * 365
   });
   return response;

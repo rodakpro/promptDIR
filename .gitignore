@@ -30,3 +30,6 @@ yarn-error.log*
 
 # captured emails (prototype email gate) — swap for an ESP later
 /data
+
+# scratch
+.write_test_tmp

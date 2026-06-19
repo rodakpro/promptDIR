@@ -12,6 +12,7 @@ import {
   toSummary,
   type CategoryId
 } from "@/lib/library";
+import { SITE_URL } from "@/lib/site";
 
 export function generateStaticParams() {
   return categories.map((category) => ({ category: category.id }));
@@ -46,8 +47,30 @@ export default async function CategoryPage({
   const meta = categoryMap[category];
   const assets = getAssetsByCategory(category);
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: `${meta.label} — PromptDir`,
+    description: meta.description,
+    url: `${SITE_URL}/categories/${category}`,
+    mainEntity: {
+      "@type": "ItemList",
+      numberOfItems: assets.length,
+      itemListElement: assets.map((asset, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        name: asset.title,
+        description: asset.promise
+      }))
+    }
+  };
+
   return (
     <SiteShell>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <PageHero label="Category" title={meta.label} intro={meta.description} />
       <div className="mx-auto w-full max-w-5xl px-5 py-8 sm:px-8">
         <Link

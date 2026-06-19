@@ -1,3 +1,3 @@
-// Re-export kept for backwards compatibility — the sidebar lives in library-sidebar.tsx.
-export { LibrarySidebar } from "./library-sidebar";
-export type { NavCount } from "./library-sidebar";
+// Dead file — the sidebar now lives in ./library-sidebar.tsx and is imported directly.
+// Emptied because the sandbox cannot unlink files; safe to delete from the repo.
+export {};

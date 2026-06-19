@@ -21,15 +21,13 @@ function NavRow({
   icon,
   label,
   count,
-  active,
-  muted = false
+  active
 }: {
   href: string;
   icon: string;
   label: string;
   count?: number;
   active: boolean;
-  muted?: boolean;
 }) {
   const Icon = resolveIcon(icon);
   return (
@@ -39,9 +37,7 @@ function NavRow({
         "focus-ring flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-semibold transition",
         active
           ? "bg-accent/10 text-accent"
-          : muted
-            ? "text-muted/60 hover:bg-panel-soft hover:text-foreground"
-            : "text-muted hover:bg-panel-soft hover:text-foreground"
+          : "text-muted hover:bg-panel-soft hover:text-foreground"
       )}
     >
       <Icon className={cn("size-4 shrink-0", active && "text-accent")} aria-hidden="true" />

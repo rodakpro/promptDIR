@@ -3,6 +3,8 @@ import { contentAssets } from "./assets-content";
 import { researchAssets } from "./assets-research";
 import { offerAssets } from "./assets-offers";
 import { automationAssets } from "./assets-automation";
+import { growthAssets } from "./assets-growth";
+import { businessAssets } from "./assets-business";
 import { agentAssets } from "./assets-agents";
 import { categories, categoryLabel, categoryMap } from "./categories";
 
@@ -17,6 +19,8 @@ export const assets: LibraryAsset[] = [
   ...researchAssets,
   ...offerAssets,
   ...automationAssets,
+  ...growthAssets,
+  ...businessAssets,
   ...agentAssets
 ];
 

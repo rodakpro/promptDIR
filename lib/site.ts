@@ -7,13 +7,17 @@ export interface NavLink {
 export const siteNav: NavLink[] = [
   { label: "Library", href: "/library" },
   { label: "Categories", href: "/categories" },
-  { label: "JSON", href: "/json" },
-  { label: "Privacy", href: "/privacy" },
   { label: "Workflows", href: "/workflows" },
-  { label: "Access", href: "/access" }
+  { label: "JSON", href: "/json" },
+  { label: "Privacy", href: "/privacy" }
 ];
 
 export const SITE_NAME = "PromptDir";
 export const SITE_PARENT = "CreatorLab.pro";
-export const SITE_TAGLINE =
+
+/** Canonical site origin. Set NEXT_PUBLIC_SITE_URL in production. */
+export const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ?? "https://promptdir.pro";
+
+export const SITE_DESCRIPTION =
   "A privacy-first prompt, checklist, workflow, and agent JSON library for creator-solopreneurs.";

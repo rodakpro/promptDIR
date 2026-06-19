@@ -3,7 +3,13 @@ import { Check, KeyRound, Library, Lock } from "lucide-react";
 import { SiteShell } from "@/components/site/site-shell";
 import { PageHero } from "@/components/site/page-hero";
 import { AccessForm } from "@/components/site/access-form";
-import { TOTAL_ASSETS } from "@/lib/library";
+import {
+  categories,
+  categoryLabel,
+  getAssetsByCategory,
+  TOTAL_ASSETS,
+  type LibraryAsset
+} from "@/lib/library";
 
 export const metadata: Metadata = {
   title: "Get free access — PromptDir",
@@ -49,6 +55,11 @@ export default async function AccessPage({
   searchParams: Promise<{ next?: string }>;
 }) {
   const { next } = await searchParams;
+
+  // One real asset per category — a clear "what's inside" peek that stays locked.
+  const peek = categories
+    .map((category) => getAssetsByCategory(category.id)[0])
+    .filter((asset): asset is LibraryAsset => Boolean(asset));
 
   return (
     <SiteShell>
@@ -115,6 +126,51 @@ export default async function AccessPage({
               <AccessForm next={next} />
             </div>
           </div>
+        </div>
+
+        <div className="mt-12">
+          <div className="flex items-center justify-between gap-4">
+            <h2 className="text-xs font-black uppercase tracking-[0.14em] text-muted">
+              A peek inside
+            </h2>
+            <span className="inline-flex items-center gap-1.5 text-xs font-black text-muted">
+              <Lock className="size-3.5 text-accent" aria-hidden="true" />
+              {TOTAL_ASSETS} assets locked
+            </span>
+          </div>
+
+          <div className="relative mt-4">
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+              {peek.map((asset) => (
+                <div
+                  key={asset.id}
+                  className="relative overflow-hidden rounded-md border border-border-soft bg-panel p-4 shadow-sm"
+                  aria-hidden="true"
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="rounded-full bg-accent/10 px-2 py-0.5 text-[0.6rem] font-black uppercase text-accent">
+                      {asset.type}
+                    </span>
+                    <Lock className="size-3.5 text-muted" />
+                  </div>
+                  <h3 className="mt-3 text-sm font-black leading-snug text-foreground">
+                    {asset.title}
+                  </h3>
+                  <p className="mt-1.5 line-clamp-2 text-xs font-semibold leading-5 text-muted">
+                    {asset.promise}
+                  </p>
+                  <p className="mt-3 text-[0.6rem] font-black uppercase text-muted">
+                    {categoryLabel(asset.category)}
+                  </p>
+                </div>
+              ))}
+            </div>
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-canvas to-transparent" />
+          </div>
+
+          <p className="mt-4 text-center text-sm font-semibold text-muted">
+            Enter your email above to open every prompt, agent, checklist, and workflow.
+          </p>
         </div>
       </div>
     </SiteShell>

@@ -57,12 +57,12 @@ export function LoginForm() {
       </div>
 
       <div>
-        <div className="mb-1.5 flex items-center justify-between">
-          <label htmlFor="login-password" className="block text-xs font-black uppercase text-muted">
-            Password
-          </label>
-          <span className="text-xs font-bold text-muted">Forgot?</span>
-        </div>
+        <label
+          htmlFor="login-password"
+          className="mb-1.5 block text-xs font-black uppercase text-muted"
+        >
+          Password
+        </label>
         <div className="relative">
           <Lock
             className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted"
